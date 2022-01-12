@@ -5,7 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "generate": "openapi-generator-cli generate -i https://api.tzkt.io/v1/swagger.json -o generated -g typescript-fetch --additional-properties=supportsES6=true",
+    "getspec": "wget https://api.tzkt.io/v1/swagger.json -O swagger.json",
+    "generate": "openapi -c node --useOptions -i swagger.json -o generated",
     "jsimport": "node jsimport.js",
     "transpile": "tsc",
     "test": "node tests/test.js",
@@ -16,9 +17,12 @@
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.4.24",
     "filehound": "^1.17.5",
+    "form-data": "^4.0.0",
+    "openapi-typescript-codegen": "^0.13.0",
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "request": "^2.88.2"
+    "abort-controller": "^3.0.0",
+    "node-fetch": "^2.6.6"
   }
 }

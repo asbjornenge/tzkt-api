@@ -2,12 +2,12 @@
   "compilerOptions": {
     "rootDir": "generated",
     "outDir": "dist",
-    "target": "es2020",
+    "target": "esnext",
     "lib": [
-      "es2020", "DOM"
+      "esnext"
     ],
-    "module": "ES2020", // (A)
-    "moduleResolution": "Node", // (B)
+    "module": "esnext",
+    "moduleResolution": "node",
     "strict": true,
     "sourceMap": true,
     // Needed for CommonJS modules

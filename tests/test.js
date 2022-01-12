@@ -1,14 +1,11 @@
-import { AccountsApi } from '../dist/api.js'
+import { AccountsService } from '../dist/index.js'
 
-const accounts = new AccountsApi({ baseUrl: 'https://api.tzkt.io' })
+const accounts = new AccountsService({ baseUrl: 'https://api.tzkt.io' })
 
-console.log(accounts.accountsGet)
+console.log(accounts)
+console.log(AccountsService.accountsGet)
 
-const contracts = await accounts.accountsGet({
-  kind: { eq: 'smart_contract' },
-  balance: { gt: 0 },
-  staked: { eq: true },
-  select: { fields: [ 'address', 'balance', 'delegate' ] },
-  sort: { desc: 'lastActivity' },
+const contracts = await AccountsService.accountsGet({
+  type: 'account',
   limit: 10
 })

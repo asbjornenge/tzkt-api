@@ -16,7 +16,9 @@ files.then((filePaths) => {
       let _data = data
       _data = _data.replace(/(import .* from\s+['"])(.*)(?=['"])/g, '$1$2.js')
       _data = _data.replace(/(export .* from\s+['"])(.*)(?=['"])/g, '$1$2.js')
-      _data = _data.replace('request.js', 'request')
+      _data = _data.replace('node-fetch.js', 'node-fetch')
+      _data = _data.replace('abort-controller.js', 'abort-controller')
+      _data = _data.replace('form-data.js', 'form-data')
       console.log(`writing to ${filepath}`)
       fs.writeFile(filepath, _data, function (err) {
         if (err) {
