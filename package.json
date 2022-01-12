@@ -1,0 +1,24 @@
+{
+  "name": "@asbjornenge/tzkt-api",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "generate": "openapi-generator-cli generate -i https://api.tzkt.io/v1/swagger.json -o generated -g typescript-fetch --additional-properties=supportsES6=true",
+    "jsimport": "node jsimport.js",
+    "transpile": "tsc",
+    "test": "node tests/test.js",
+    "cleanup": "rm -Rf generated && rm -Rf dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.4.24",
+    "filehound": "^1.17.5",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "request": "^2.88.2"
+  }
+}

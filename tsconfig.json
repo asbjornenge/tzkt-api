@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "rootDir": "generated",
+    "outDir": "dist",
+    "target": "es2020",
+    "lib": [
+      "es2020", "DOM"
+    ],
+    "module": "ES2020", // (A)
+    "moduleResolution": "Node", // (B)
+    "strict": true,
+    "sourceMap": true,
+    // Needed for CommonJS modules
+    "allowSyntheticDefaultImports": true, // (C)
+    //
+    "declaration": true,
+  }
+}
