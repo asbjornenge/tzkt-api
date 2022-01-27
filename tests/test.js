@@ -1,4 +1,4 @@
-import { TzktAPI } from '../dist/index.js'
+import { TzktAPI, TzktEvents } from '../src/index.js'
 
 const api = new TzktAPI({ baseUrl: 'https://api.tzkt.io' })
 
@@ -7,4 +7,10 @@ const contracts = await api.accounts.accountsGet({
   limit: 10
 })
 
-console.log(contracts)
+// TODO: Asserts we get some contracts... console.log(contracts)
+
+const events = new TzktEvents({ baseUrl: 'https://api.tzkt.io/v1/events' })
+const sub = events.operations({ types: 'origination' })
+  .subscribe({ next: (tx) => {
+    console.log('gets here', tx)
+  } })
