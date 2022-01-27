@@ -6,11 +6,12 @@
   "main": "index.js",
   "scripts": {
     "getspec": "wget https://api.tzkt.io/v1/swagger.json -O swagger.json",
-    "generate": "openapi -c node --useOptions -i swagger.json -o generated",
+    "generate": "openapi -c node --useOptions --name TzktAPI -i swagger.json -o generated",
     "jsimport": "node jsimport.js",
     "transpile": "tsc",
-    "test": "node tests/test.js",
-    "cleanup": "rm -Rf generated && rm -Rf dist"
+    "cleanup": "rm -Rf generated && rm -Rf dist",
+    "build": "npm run cleanup && npm run getspec && npm run generate && npm run jsimport && npm run transpile",
+    "test": "node tests/test.js"
   },
   "author": "",
   "license": "ISC",
@@ -18,7 +19,7 @@
     "@openapitools/openapi-generator-cli": "^2.4.24",
     "filehound": "^1.17.5",
     "form-data": "^4.0.0",
-    "openapi-typescript-codegen": "^0.13.0",
+    "openapi-typescript-codegen": "^0.16.2",
     "typescript": "^4.5.4"
   },
   "dependencies": {

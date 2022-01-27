@@ -1,11 +1,10 @@
-import { AccountsService } from '../dist/index.js'
+import { TzktAPI } from '../dist/index.js'
 
-const accounts = new AccountsService({ baseUrl: 'https://api.tzkt.io' })
+const api = new TzktAPI({ baseUrl: 'https://api.tzkt.io' })
 
-console.log(accounts)
-console.log(AccountsService.accountsGet)
-
-const contracts = await AccountsService.accountsGet({
-  type: 'account',
+const contracts = await api.accounts.accountsGet({
+  type: 'contract',
   limit: 10
 })
+
+console.log(contracts)
