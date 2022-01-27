@@ -10,7 +10,14 @@ const contracts = await api.accounts.accountsGet({
 // TODO: Asserts we get some contracts... console.log(contracts)
 
 const events = new TzktEvents({ baseUrl: 'https://api.tzkt.io/v1/events' })
-const sub = events.operations({ types: 'origination' })
-  .subscribe({ next: (tx) => {
-    console.log('gets here', tx)
-  } })
+await events.start()
+const onHeadFull = (h) => { console.log(h) } 
+const onHeadHash = (h) => { console.log(h.data.hash) } 
+events.on('head', onHeadFull)
+events.on('head', onHeadHash)
+events.listen('head')
+events.off('head', onHeadFull)
+//events.on('operations', (opr) => { console.log(opr) })
+//events.listen('operations', { type: 'transaction' })
+//events.off('head', onHead)
+//events.stop()

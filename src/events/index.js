@@ -4,19 +4,19 @@ import {
   EventType,
   channelToMethod
 } from './types.js'
-import Observable from "zen-observable";
-//import { State, Block, BigMapUpdate } from '@dipdup/tzkt-api';
 
 export class TzktEvents {
   #connection;
   #subscriptions;
   #networkEvents;
   #statusChanges;
+  #dataObservers;
   #eventObservers;
   #statusObservers;
 
   constructor({ baseUrl, reconnect = true }) {
     this.#subscriptions = [] 
+    this.#dataObservers = Object.values(CHANNEL).reduce((m,c) => { m[c] = []; return m }, {})
     this.#eventObservers = [] 
     this.#statusObservers = [] 
 
@@ -46,25 +46,26 @@ export class TzktEvents {
     if (reconnect) {
       this.connection.onreconnected(async () => {
         this.#onStatusChanged(signalR.HubConnectionState.Connected);
-        this.#subscriptions.forEach(async sub => await this.connection.invoke(sub.method), this);
       })
     } else {
       this.connection.onreconnected(() => this.#onStatusChanged(signalR.HubConnectionState.Connected));
     }
 
-    this.networkEvents = new Observable(observer => {
-      this.#eventObservers.push(observer)
-      return () => {
-        this.#eventObservers.delete(observer)
-      }
-    })
-
-    this.statusChanges = new Observable(observer => {
-      this.#statusObservers.push(observer)
-      return () => {
-        this.#statusObservers.delete(observer)
-      }
-    })
+// Add options to sub to these if you want
+//
+//    this.networkEvents = new Observable(observer => {
+//      this.#eventObservers.push(observer)
+//      return () => {
+//        this.#eventObservers.delete(observer)
+//      }
+//    })
+//
+//    this.statusChanges = new Observable(observer => {
+//      this.#statusObservers.push(observer)
+//      return () => {
+//        this.#statusObservers.delete(observer)
+//      }
+//    })
   }
 
   async start() {
@@ -97,141 +98,66 @@ export class TzktEvents {
 //            default: throw new Error(`Intermediate connection hub state: ${this.connection.state}`);
 //        }
 //    }
-//
-//    /**
-//     * Subscribe to connection status changes
-//     */
-//    public status(): Observable<signalR.HubConnectionState> {
-//        return this.statusChanges;
-//    }
-//
-//    /**
-//     * Subscribe to raw TzKT events (init, rollback message types)
-//     */
-//    public events(): Observable<Event> {
-//        return this.networkEvents;
-//    }
-//
-//    /*
-//     * head
-//     */
-//    public head(): Observable<SubscriptionMessage<State>> {
-//        return new Observable<SubscriptionMessage<State>>(observer => {
-//            return this.createSubscription<State>(CHANNEL.HEAD, observer);
-//        })
-//    }
-//
-//    /*
-//     * blocks
-//     */
-//    public blocks(): Observable<SubscriptionMessage<Block>> {
-//        return new Observable<SubscriptionMessage<Block>>(observer => {
-//            return this.createSubscription<Block>(CHANNEL.BLOCKS, observer);
-//        })
-//    }
-//
-  /*
-   * operations
-   */
-  operations(params) {
-    return new Observable(observer => {
-        return this.#createSubscription(CHANNEL.OPERATIONS, observer, params)
-    })
+
+  on(channel, fn) {
+    if (!this.#dataObservers[channel]) throw new Error(`Unsupported channel: ${channel}`)
+    this.#dataObservers[channel].push(fn)
   }
 
-//    /*
-//     * bigmaps
-//     */
-//    public bigmaps(params?: BigMapParameters): Observable<SubscriptionMessage<BigMapUpdate>> {
-//        return new Observable<SubscriptionMessage<BigMapUpdate>>(observer => {
-//            return this.createSubscription<BigMapUpdate>(CHANNEL.BIGMAPS, observer, params);
-//        })
-//    }
+  off(channel, fn) {
+    if (!this.#dataObservers[channel]) throw new Error(`Unsupported channel: ${channel}`)
+    this.#dataObservers[channel] = this.#dataObservers[channel].filter(f => f !== fn)
+  }
 
-    #createSubscription(channel, observer, params) {
-        const subscription = new Subscription(channel, observer, params)
-        this.#subscriptions.push(subscription)
-
-        this.start()
-          .then(() => this.connection.invoke(subscription.method, params))
-          .catch(error => { throw new Error(error) })
-
-        return () => {
-            this.#subscriptions.delete(subscription)
-            if (subscription.observer.complete) {
-                subscription.observer.complete()
-            }
-        }
-    }
-
-  #handle(channel, items, state) {
-    items.forEach(item => {
-      this.#subscriptions.forEach(sub => {
-        if (sub.observer.next && sub.matches(channel, item)) {
-          sub.observer.next({
-            data: item,
-            state: state
-          });
-        }
-      })
-    }, this)
+  async listen(channel, params) {
+    if (params)
+      await this.connection.invoke(channelToMethod(channel), params) 
+    else
+      await this.connection.invoke(channelToMethod(channel)) 
   }
 
   #onMessage(channel, message) {
     switch (message.type) {
       case EventType.Init: {
-        this.#onEvent(message);
+        this.#eventObservers.forEach(fn => fn(message)) 
         break;
       }
       case EventType.Data: {
-        this.#handle(channel, [message.data], message.state);
+        this.#dataObservers[channel].forEach(fn => fn(message)) 
         break;
       }
       case EventType.Reorg: {
-        this.#onEvent(message);
+        this.#statusObservers.forEach(fn => fn(message))
         break;
       }
     }
   }
 
-  #onEvent(event) {
-    this.#eventObservers.forEach(o => {
-      if (o.next) {
-        o.next(event);
-      }
-    })
+  #onStatusChanged(status) {
+    this.#statusObservers.forEach(fn => fn(status))
   }
 
-  #onStatusChanged(status) {
-    this.#statusObservers.forEach(o => {
-      if (o.next) {
-        o.next(status);
-      }
-    })
-  }
 }
 
-//export interface SubscriptionMessage<Type> {
-//    data: Type | null,
-//    state: number
-//}
-
 class Subscription {
-  #channel;
-  #params;
-  observer;
+  channel;
+  params;
   method;
+  fns;
 
-  constructor(channel, observer, params) {
-    this.#channel = channel
-    this.#params = params
-    this.observer = observer
+  constructor(channel, params) {
+    this.channel = channel
+    this.params = params
     this.method = channelToMethod(channel)
   }
 
+  register(fn) {
+    fns.push(fn)
+  }
+
   matches(channel, item) {
-    if (this.#channel !== channel) return false
-//    if (this.#params && !paramsMatch(this.#params, item)) return false
+    if (this.channel !== channel) return false
+//    if (this.params && !paramsMatch(this.params, item)) return false
     return true
   }
 }
