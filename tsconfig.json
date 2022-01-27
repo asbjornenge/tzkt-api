@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "rootDir": "generated",
-    "outDir": "dist",
+    "outDir": "src/api",
     "target": "esnext",
     "lib": [
       "esnext"

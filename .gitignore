@@ -1,4 +1,4 @@
 node_modules
 generated
-dist
+src/api
 *.swp

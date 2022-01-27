@@ -9,7 +9,7 @@
     "generate": "openapi -c node --useOptions --name TzktAPI -i swagger.json -o generated",
     "jsimport": "node jsimport.js",
     "transpile": "tsc",
-    "cleanup": "rm -Rf generated && rm -Rf dist",
+    "cleanup": "rm -Rf generated && rm -Rf src/api",
     "build": "npm run cleanup && npm run getspec && npm run generate && npm run jsimport && npm run transpile",
     "test": "node tests/test.js"
   },
