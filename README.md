@@ -9,7 +9,7 @@ It also exposes a wrapper around [SignalR](https://docs.microsoft.com/en-us/aspn
 ## Install
 
 ```
-npm i @asbjornenge/tzkt-api
+npm i @asbjornenge/tzkt-api // <- WIP - NOT YET PUBLISHED
 ```
 
 ## Use
