@@ -1,3 +1,4 @@
+import test from 'ava'
 
 export class DeferredPromise {
   constructor() {

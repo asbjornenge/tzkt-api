@@ -1,17 +1,14 @@
-import assert from 'assert'
+import test from 'ava'
 import { TzktAPI } from '../src/index.js'
 
-describe('api', function() {
+test('get accounts', async function(t) {
+  const api = new TzktAPI({ baseUrl: 'https://api.tzkt.io' })
 
-  it('can get accounts', async function() {
-    const api = new TzktAPI({ baseUrl: 'https://api.tzkt.io' })
+  const contracts = await api.accounts.accountsGet({
+    type: 'contract',
+    limit: 10
+  })
 
-    const contracts = await api.accounts.accountsGet({
-      type: 'contract',
-      limit: 10
-    })
+  t.assert(contracts.length == 10)
+}) 
 
-    assert(contracts.length == 10)
-  }) 
-
-})
