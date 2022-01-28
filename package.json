@@ -11,7 +11,7 @@
     "transpile": "tsc",
     "cleanup": "rm -Rf generated && rm -Rf src/api",
     "build": "npm run cleanup && npm run getspec && npm run generate && npm run jsimport && npm run transpile",
-    "test": "mocha tests --reporter nyan"
+    "test": "mocha --parallel tests"
   },
   "author": "",
   "license": "ISC",

@@ -48,22 +48,6 @@ export class TzktEvents {
     } else {
       this.connection.onreconnected(() => this.#onStatusChanged(signalR.HubConnectionState.Connected));
     }
-
-// Add options to sub to these if you want
-//
-//    this.networkEvents = new Observable(observer => {
-//      this.#eventObservers.push(observer)
-//      return () => {
-//        this.#eventObservers.delete(observer)
-//      }
-//    })
-//
-//    this.statusChanges = new Observable(observer => {
-//      this.#statusObservers.push(observer)
-//      return () => {
-//        this.#statusObservers.delete(observer)
-//      }
-//    })
   }
 
   async start() {
