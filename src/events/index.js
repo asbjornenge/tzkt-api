@@ -5,7 +5,7 @@ import {
   channelToMethod
 } from './utils.js'
 
-export class TzktEvents {
+export class TzKTEvents {
   #connection;
   #dataObservers;
   #eventObservers;

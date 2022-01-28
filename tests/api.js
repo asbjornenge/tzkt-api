@@ -1,8 +1,8 @@
 import test from 'ava'
-import { TzktAPI } from '../src/index.js'
+import { TzKTAPI } from '../src/index.js'
 
 test('get accounts', async function(t) {
-  const api = new TzktAPI({ baseUrl: 'https://api.tzkt.io' })
+  const api = new TzKTAPI({ baseUrl: 'https://api.tzkt.io' })
 
   const contracts = await api.accounts.accountsGet({
     type: 'contract',

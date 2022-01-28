@@ -1,4 +1,4 @@
-# TzKTApi
+# TzKTAPI
 
 TzKTApi is a Node.js module to communicate with a [tzkt API](https://api.tzkt.io/).
 
@@ -17,9 +17,19 @@ npm i @asbjornenge/tzkt-api
 ### TzKTAPI
 
 ```
+import { TzKTAPI } from '@asbjornenge/tzkt-api'
+
+const api = new TzKTAPI({ baseUrl: 'https://api.tzkt.io' })
+
+const contracts = await api.accounts.accountsGet({
+  type: 'contract',
+  limit: 10
+})
+
+console.log(contracts)
 ```
 
-### TzKTEvent
+### TzKTEvents
 
 ```
 ```

@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "getspec": "wget https://api.tzkt.io/v1/swagger.json -O swagger.json",
-    "generate": "openapi -c node --useOptions --name TzktAPI -i swagger.json -o generated",
+    "generate": "openapi -c node --useOptions --name TzKTAPI -i swagger.json -o generated",
     "jsimport": "node jsimport.js",
     "transpile": "tsc",
     "cleanup": "rm -Rf generated && rm -Rf src/api",
