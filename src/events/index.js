@@ -127,7 +127,7 @@ export class TzktEvents {
         break;
       }
       case EventType.Reorg: {
-        this.#statusObservers.forEach(fn => fn(message))
+        this.#eventObservers.forEach(fn => fn(message))
         break;
       }
     }
