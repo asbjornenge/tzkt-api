@@ -110,10 +110,12 @@ export class TzktEvents {
   }
 
   async listen(channel, params) {
+    let res;
     if (params)
-      await this.connection.invoke(channelToMethod(channel), params) 
+      res = await this.connection.invoke(channelToMethod(channel), params) 
     else
-      await this.connection.invoke(channelToMethod(channel)) 
+      res = await this.connection.invoke(channelToMethod(channel)) 
+    return res
   }
 
   #onMessage(channel, message) {
