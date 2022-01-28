@@ -1,6 +1,6 @@
 import * as signalR from "@microsoft/signalr";
 import {
-  CHANNEL,
+  CHANNELS,
   EventType,
   channelToMethod
 } from './utils.js'
@@ -12,7 +12,7 @@ export class TzktEvents {
   #statusObservers;
 
   constructor({ baseUrl, reconnect = true }) {
-    this.#dataObservers = Object.values(CHANNEL).reduce((m,c) => { m[c] = []; return m }, {})
+    this.#dataObservers = Object.values(CHANNELS).reduce((m,c) => { m[c] = []; return m }, {})
     this.#eventObservers = [] 
     this.#statusObservers = [] 
 
@@ -31,10 +31,10 @@ export class TzktEvents {
 
     this.connection = builder.build()
 
-    this.connection.on(CHANNEL.HEAD, msg => this.#onMessage(CHANNEL.HEAD, msg));
-    this.connection.on(CHANNEL.BLOCKS, msg => this.#onMessage(CHANNEL.BLOCKS, msg));
-    this.connection.on(CHANNEL.OPERATIONS, msg => this.#onMessage(CHANNEL.OPERATIONS, msg));
-    this.connection.on(CHANNEL.BIGMAPS, msg => this.#onMessage(CHANNEL.BIGMAPS, msg));
+    this.connection.on(CHANNELS.HEAD, msg => this.#onMessage(CHANNELS.HEAD, msg));
+    this.connection.on(CHANNELS.BLOCKS, msg => this.#onMessage(CHANNELS.BLOCKS, msg));
+    this.connection.on(CHANNELS.OPERATIONS, msg => this.#onMessage(CHANNELS.OPERATIONS, msg));
+    this.connection.on(CHANNELS.BIGMAPS, msg => this.#onMessage(CHANNELS.BIGMAPS, msg));
 
     this.connection.onclose(() => this.#onStatusChanged(signalR.HubConnectionState.Disconnected));
     this.connection.onreconnecting(() => this.#onStatusChanged(signalR.HubConnectionState.Reconnecting));

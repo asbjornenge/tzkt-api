@@ -4,36 +4,23 @@ export const EventType = {
     Reorg: 2
 }
 
-export const CHANNEL = {
+export const CHANNELS = {
   HEAD: 'head',
   BLOCKS: 'blocks',
-  OPERATIONS: 'operations',
-  BIGMAPS: 'bigmaps'
+  BIGMAPS: 'bigmaps',
+  ACCOUNTS: 'accounts',
+  OPERATIONS: 'operations'
 }
 
 export const METHOD = {
-  HEAD: 'SubscribeToHead',
-  BLOCKS: 'SubscribeToBlocks',
-  OPERATIONS: 'SubscribeToOperations',
-  BIGMAPS: 'SubscribeToBigMaps'
+  head: 'SubscribeToHead',
+  blocks: 'SubscribeToBlocks',
+  bigmaps: 'SubscribeToBigMaps',
+  accounts: 'SubscribeToAccounts',
+  operations: 'SubscribeToOperations',
 }
 
 export function channelToMethod(channel) {
-  switch (channel) {
-    case CHANNEL.HEAD: {
-      return METHOD.HEAD;
-    }
-    case CHANNEL.BLOCKS: {
-      return METHOD.BLOCKS;
-    }
-    case CHANNEL.OPERATIONS: {
-      return METHOD.OPERATIONS;
-    }
-    case CHANNEL.BIGMAPS: {
-      return METHOD.BIGMAPS;
-    }
-    default: {
-      throw new Error('Unknown channel: ' + channel)
-    }
-  }
+  if (!METHOD[channel]) throw new Error(`Unknown channel: ${channel}`)
+  return METHOD[channel] 
 }
