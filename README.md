@@ -16,7 +16,7 @@ npm i @asbjornenge/tzkt-api
 
 ### TzKTAPI
 
-```
+```js
 import { TzKTAPI } from '@asbjornenge/tzkt-api'
 
 const api = new TzKTAPI({ baseUrl: 'https://api.tzkt.io' })
