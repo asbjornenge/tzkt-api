@@ -7,7 +7,6 @@ import {
 
 export class TzktEvents {
   #connection;
-  #subscriptions;
   #networkEvents;
   #statusChanges;
   #dataObservers;
@@ -15,7 +14,6 @@ export class TzktEvents {
   #statusObservers;
 
   constructor({ baseUrl, reconnect = true }) {
-    this.#subscriptions = [] 
     this.#dataObservers = Object.values(CHANNEL).reduce((m,c) => { m[c] = []; return m }, {})
     this.#eventObservers = [] 
     this.#statusObservers = [] 
@@ -81,32 +79,44 @@ export class TzktEvents {
     }
   }
 
-//    public async stop() {
-//        switch (this.connection.state) {
-//            case signalR.HubConnectionState.Disconnected: break;
-//            case signalR.HubConnectionState.Connected: {
-//                this.onStatusChanged(signalR.HubConnectionState.Disconnecting);
-//                await this.connection.stop();
-//                this.subscriptions.forEach(sub => {
-//                    if (sub.observer.complete) {
-//                        sub.observer.complete();
-//                    }
-//                }, this);
-//                this.subscriptions.clear();
-//                break;
-//            }
-//            default: throw new Error(`Intermediate connection hub state: ${this.connection.state}`);
-//        }
-//    }
+  async stop() {
+    switch (this.connection.state) {
+      case signalR.HubConnectionState.Disconnected: break;
+      case signalR.HubConnectionState.Connected: {
+        this.#onStatusChanged(signalR.HubConnectionState.Disconnecting);
+        await this.connection.stop();
+        break;
+      }
+      default: throw new Error(`Intermediate connection hub state: ${this.connection.state}`);
+    }
+  }
 
   on(channel, fn) {
-    if (!this.#dataObservers[channel]) throw new Error(`Unsupported channel: ${channel}`)
-    this.#dataObservers[channel].push(fn)
+    switch(channel) {
+      case 'networkEvent':
+        this.#eventObservers.push(fn)
+        break
+      case 'statusChange':
+        this.#statusObservers.push(fn)
+        break
+      default:
+        if (!this.#dataObservers[channel]) throw new Error(`Unsupported channel: ${channel}`)
+        this.#dataObservers[channel].push(fn)
+    }
   }
 
   off(channel, fn) {
-    if (!this.#dataObservers[channel]) throw new Error(`Unsupported channel: ${channel}`)
-    this.#dataObservers[channel] = this.#dataObservers[channel].filter(f => f !== fn)
+    switch(channel) {
+      case 'networkEvent':
+        this.#eventObservers = this.#eventObservers.filter(f => f !== fn)
+        break
+      case 'statusChange':
+        this.#statusObservers = this.#statusObservers.filter(f => f !== fn)
+        break
+      default:
+        if (!this.#dataObservers[channel]) throw new Error(`Unsupported channel: ${channel}`)
+        this.#dataObservers[channel] = this.#dataObservers[channel].filter(f => f !== fn)
+    }
   }
 
   async listen(channel, params) {
@@ -118,14 +128,14 @@ export class TzktEvents {
     return res
   }
 
-  #onMessage(channel, message) {
+  async #onMessage(channel, message) {
     switch (message.type) {
       case EventType.Init: {
         this.#eventObservers.forEach(fn => fn(message)) 
         break;
       }
       case EventType.Data: {
-        this.#dataObservers[channel].forEach(fn => fn(message)) 
+        this.#dataObservers[channel].forEach(async fn => await fn(message.data)) 
         break;
       }
       case EventType.Reorg: {

@@ -1,14 +1,30 @@
-//import { TzktAPI, TzktEvents } from '../src/index.js'
-//
-//const api = new TzktAPI({ baseUrl: 'https://api.tzkt.io' })
-//
-//const contracts = await api.accounts.accountsGet({
-//  type: 'contract',
-//  limit: 10
-//})
-//
-//// TODO: Asserts we get some contracts... console.log(contracts)
-//
+import assert from 'assert'
+import { TzktEvents } from '../src/index.js'
+import { DeferredPromise } from './utils.js'
+
+describe('events', function() {
+  
+  it('subscribe to head', async function() {
+    this.timeout(60000)
+    const events = new TzktEvents({ baseUrl: 'https://api.tzkt.io/v1/events' })
+    await events.start()
+    const resolver = new DeferredPromise()
+    events.on('head', async (head) => {
+      try {
+        assert(head.hash != undefined)
+        await events.stop()
+        resolver.resolve()
+      } catch(e) {
+        await events.stop()
+        resolver.reject(e)
+      }
+    })
+    await events.listen('head')
+    await resolver
+  })
+
+})
+
 //const events = new TzktEvents({ baseUrl: 'https://api.tzkt.io/v1/events' })
 //await events.start()
 //const onHeadFull = (h) => { console.log(h) } 
