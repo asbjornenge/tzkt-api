@@ -1,6 +1,6 @@
 import test from 'ava'
 import { TzktEvents } from '../src/index.js'
-import { DeferredPromise } from './utils.js'
+import { DeferredPromise } from '../testUtils.js'
 
 test('subscribe to head', async function(t) {
   const events = new TzktEvents({ baseUrl: 'https://api.tzkt.io/v1/events' })
