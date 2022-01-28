@@ -3,12 +3,10 @@ import {
   CHANNEL,
   EventType,
   channelToMethod
-} from './types.js'
+} from './utils.js'
 
 export class TzktEvents {
   #connection;
-  #networkEvents;
-  #statusChanges;
   #dataObservers;
   #eventObservers;
   #statusObservers;
@@ -134,27 +132,3 @@ export class TzktEvents {
   }
 
 }
-
-class Subscription {
-  channel;
-  params;
-  method;
-  fns;
-
-  constructor(channel, params) {
-    this.channel = channel
-    this.params = params
-    this.method = channelToMethod(channel)
-  }
-
-  register(fn) {
-    fns.push(fn)
-  }
-
-  matches(channel, item) {
-    if (this.channel !== channel) return false
-//    if (this.params && !paramsMatch(this.params, item)) return false
-    return true
-  }
-}
-
