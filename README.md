@@ -37,8 +37,8 @@ console.log(contracts)
 import { TzKTEvents } from '@asbjornenge/tzkt-api'
 
 const events = new TzKTEvents({ baseUrl: 'https://api.tzkt.io/v1/events' })
-events.on('head', async (head) => console.log)
 await events.start()
+events.on('head', async (head) => console.log(head))
 await events.listen('head')
 ```
 

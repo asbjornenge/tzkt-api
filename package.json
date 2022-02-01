@@ -1,9 +1,9 @@
 {
   "name": "@asbjornenge/tzkt-api",
   "type": "module",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "getspec": "wget https://api.tzkt.io/v1/swagger.json -O swagger.json",
     "generate": "openapi -c node --useOptions --name TzKTAPI -i swagger.json -o generated",
