@@ -13,8 +13,12 @@
     "build": "npm run cleanup && npm run getspec && npm run generate && npm run jsimport && npm run transpile",
     "test": "ava --timeout=1m"
   },
-  "author": "",
+  "author": "Asbjorn Enge <asbjorn@asbjornenge.com>",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asbjornenge/tzkt-api.git"
+  },
   "devDependencies": {
     "ava": "^4.0.1",
     "filehound": "^1.17.5",

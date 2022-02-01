@@ -11,7 +11,7 @@ It also exposes a wrapper around [SignalR](https://docs.microsoft.com/en-us/aspn
 ## Install
 
 ```
-npm i @asbjornenge/tzkt-api // <- WIP - NOT YET PUBLISHED
+npm i @asbjornenge/tzkt-api
 ```
 
 ## Use
