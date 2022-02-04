@@ -1,0 +1,1 @@
+{"version":3,"file":"BaseHttpRequest.js","sourceRoot":"","sources":["../../../generated/core/BaseHttpRequest.ts"],"names":[],"mappings":"AAOA,MAAM,OAAO,eAAe;IAEL,MAAM,CAAgB;IAEzC,YAAY,MAAqB;QAC7B,IAAI,CAAC,MAAM,GAAG,MAAM,CAAC;IACzB,CAAC;IAEM,OAAO,CAAI,OAA0B;QACxC,MAAM,IAAI,KAAK,CAAC,iBAAiB,CAAC,CAAC;IACvC,CAAC;CACJ"}

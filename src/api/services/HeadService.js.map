@@ -1,0 +1,1 @@
+{"version":3,"file":"HeadService.js","sourceRoot":"","sources":["../../../generated/services/HeadService.ts"],"names":[],"mappings":"AAOA,MAAM,OAAO,WAAW;IAEH,WAAW,CAAkB;IAE9C,YAAY,WAA4B;QACpC,IAAI,CAAC,WAAW,GAAG,WAAW,CAAC;IACnC,CAAC;IAED;;;;;OAKG;IACI,OAAO;QACV,OAAO,IAAI,CAAC,WAAW,CAAC,OAAO,CAAC;YAC5B,MAAM,EAAE,KAAK;YACb,GAAG,EAAE,UAAU;SAClB,CAAC,CAAC;IACP,CAAC;CAEJ"}
