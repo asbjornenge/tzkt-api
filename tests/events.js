@@ -3,7 +3,7 @@ import { TzKTEvents } from '../src/index.js'
 import { DeferredPromise } from '../testUtils.js'
 
 test('subscribe to head', async function(t) {
-  const events = new TzKTEvents({ baseUrl: 'https://api.tzkt.io/v1/events' })
+  const events = new TzKTEvents({ BASE: 'https://api.tzkt.io/v1/events' })
   await events.start()
   const resolver = new DeferredPromise()
   events.on('head', async (head) => {
@@ -21,7 +21,7 @@ test('subscribe to head', async function(t) {
 })
 
 test('subscribe to blocks', async function(t) {
-  const events = new TzKTEvents({ baseUrl: 'https://api.tzkt.io/v1/events' })
+  const events = new TzKTEvents({ BASE: 'https://api.tzkt.io/v1/events' })
   await events.start()
   const resolver = new DeferredPromise()
   events.on('blocks', async (blocks) => {
@@ -39,7 +39,7 @@ test('subscribe to blocks', async function(t) {
 })
 
 //test('subscribe to account', async function(t) {
-//  const events = new TzKTEvents({ baseUrl: 'https://api.tzkt.io/v1/events' })
+//  const events = new TzKTEvents({ BASE: 'https://api.tzkt.io/v1/events' })
 //  await events.start()
 //  const resolver = new DeferredPromise()
 //  events.on('accounts', async (account) => {
@@ -60,7 +60,7 @@ test('subscribe to blocks', async function(t) {
 //})
 
 test('subscribe to operations', async function(t) {
-  const events = new TzKTEvents({ baseUrl: 'https://api.tzkt.io/v1/events' })
+  const events = new TzKTEvents({ BASE: 'https://api.tzkt.io/v1/events' })
   await events.start()
   const resolver = new DeferredPromise()
   events.on('operations', async (operations) => {
@@ -79,7 +79,7 @@ test('subscribe to operations', async function(t) {
 })
 
 test('subscribe to bigmap', async function(t) {
-  const events = new TzKTEvents({ baseUrl: 'https://api.tzkt.io/v1/events' })
+  const events = new TzKTEvents({ BASE: 'https://api.tzkt.io/v1/events' })
   await events.start()
   const resolver = new DeferredPromise()
   events.on('bigmaps', async (bigmapUpdates) => {

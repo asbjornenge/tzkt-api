@@ -11,14 +11,14 @@ export class TzKTEvents {
   #eventObservers;
   #statusObservers;
 
-  constructor({ baseUrl, reconnect = true }) {
+  constructor({ BASE, reconnect = true }) {
     this.#dataObservers = Object.values(CHANNELS).reduce((m,c) => { m[c] = []; return m }, {})
     this.#eventObservers = [] 
     this.#statusObservers = [] 
 
     let builder = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.Error)
-      .withUrl(baseUrl);
+      .withUrl(BASE);
 
     if (reconnect) {
       builder = builder.withAutomaticReconnect({

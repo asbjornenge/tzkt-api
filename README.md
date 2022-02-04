@@ -21,7 +21,7 @@ npm i @asbjornenge/tzkt-api
 ```js
 import { TzKTAPI } from '@asbjornenge/tzkt-api'
 
-const api = new TzKTAPI({ baseUrl: 'https://api.tzkt.io' })
+const api = new TzKTAPI({ BASE: 'https://api.tzkt.io' })
 
 const contracts = await api.accounts.accountsGet({
   type: 'contract',
@@ -36,7 +36,7 @@ console.log(contracts)
 ```js
 import { TzKTEvents } from '@asbjornenge/tzkt-api'
 
-const events = new TzKTEvents({ baseUrl: 'https://api.tzkt.io/v1/events' })
+const events = new TzKTEvents({ BASE: 'https://api.tzkt.io/v1/events' })
 await events.start()
 events.on('head', async (head) => console.log(head))
 await events.listen('head')
